@@ -1,0 +1,84 @@
+﻿@page "/products/{productId:int}"
+@inject IProductsScreenUseCases ProductsScreenUseCases
+<h3>Product</h3>
+<br />
+@if (product != null)
+{
+<div>
+    <div class="mb-3">
+        <img src="@product.Image" style="width:300px;height:300px;" />
+    </div>
+    <div class="mb-3">
+        <h5>
+            <label style="color:darkred">@product.Name</label>
+        </h5>
+    </div>
+    <div class="mb-3">
+        <p>
+            Description: <label style="color:darkred">@product.Description</label>
+        </p>
+    </div>
+    <div class="mb-3">
+        <p>
+            Discount: <label style="color:darkred">@product.Discount.ToString()</label>
+        </p>
+    </div>
+    <div class="mb-3">
+        <p>
+            Price: <label style="color:darkred">@product.Price.ToString()</label>
+        </p>
+    </div>
+    <div class="mb-3">
+        <p>
+            Cart: <label style="color:darkred">@product.CartId.ToString()</label>
+        </p>
+    </div>
+</div>
+    @*<NavLink href="@($"/carts/{cart.CartId}")">HARDCODED NEED TO BE FEED*@
+    <NavLink href="@($"carts/1")">
+        <button class="btn btn-primary" type="submit">
+            View your cart
+        </button>
+    </NavLink>
+    <NavLink href="@($"/")">
+        <button class="btn btn-primary" type="submit">
+            View All Products
+        </button>
+    </NavLink>
+    <NavLink href="@($"/order/{product.ProductId}")">
+            <button class="btn btn-primary" type="submit">
+                Add to card
+            </button>
+        </NavLink>
+
+}
+
+@code {
+    Product product;
+    //Cart cart;
+
+    //[Parameter]
+    //public int CartId { get; set; }
+
+    [Parameter]
+    public int ProductId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        product = await ProductsScreenUseCases.ViewProductById(ProductId);
+        //cart = await CartsScreenUseCases.ViewCartById(CartId);
+    }
+
+    //void Save()
+    //{
+    //    bool bSuccess = true;
+
+    //    if (bSuccess)
+    //    {
+    //        ProductsScreenUseCases.UpdateProduct(product);
+    //    }
+
+
+    //}
+}
+

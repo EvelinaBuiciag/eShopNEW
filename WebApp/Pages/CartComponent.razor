@@ -1,0 +1,68 @@
+﻿@page "/carts/1"
+@inject ICartsScreenUseCases CartsScreenUseCases
+@inject IProductsScreenUseCases ProductsScreenUseCases
+<h3>Carts</h3>
+<br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Discount
+                </th>
+                <th>
+                    Cart
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (products != null && products.Count() > 0)
+            {
+                @foreach (var product in products)
+                {
+                    <ProductRowComponent Product="product"></ProductRowComponent>
+                } }
+            else
+            {
+                <tr>
+                    <td colspan="3">
+                        Cannot find products
+                    </td>
+                </tr>
+            }
+
+            @*<NavLink href="@($"/products/{product.ProductId}")">*@
+
+
+        </tbody>
+    </table>
+    <NavLink href="@($"/")">
+        <button class="btn btn-primary" type="submit">
+            View All Products
+        </button>
+    </NavLink>
+
+@code {
+
+    public int CartId = 1;
+    private IEnumerable<Product> products;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    carts = await CartsScreenUseCases.ViewCartsAsync();
+    //}
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductsScreenUseCases.ViewCartsProducts(CartId);
+    }
+
+}

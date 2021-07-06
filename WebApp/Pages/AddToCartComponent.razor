@@ -1,0 +1,65 @@
+﻿@*@page "/products/{productId:int}"*@
+@page "/order/{productId:int}"
+@inject IProductsScreenUseCases ProductsScreenUseCases
+@inject ICartsScreenUseCases CartsScreenUseCases
+<h3>Add product to the cart</h3>
+<br />
+@if (product != null)
+{
+    <div class="mb-3">
+        <h5>
+            <label style="color:darkred">@product.Name</label>
+        </h5>
+    </div>
+    <EditForm Model="product" OnValidSubmit="Save">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+
+        <div class="mb-3">
+            <label for="cart" class="form-label">Owner</label>
+            <InputNumber class="form-control" id="owner" @bind-Value="product.CartId"></InputNumber>
+        </div>
+        <NavLink href="@($"carts/1")">
+            <button class="btn btn-primary" type="submit">
+                View your cart
+            </button>
+        </NavLink>
+        <NavLink href="@($"products/{product.ProductId}")">
+            <button class="btn btn-primary" type="submit">
+                Save
+            </button>
+        </NavLink>
+        <NavLink href="@($"/")">
+            <button class="btn btn-primary" type="submit">
+                View All Products
+            </button>
+        </NavLink>
+
+    </EditForm>
+
+}
+
+@code {
+    Product product;
+    Cart cart;
+    [Parameter]
+    public int ProductId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        product = await ProductsScreenUseCases.ViewProductById(ProductId);
+    }
+
+    void Save()
+    {
+        bool bSuccess = true;
+
+        if (bSuccess)
+        {
+            ProductsScreenUseCases.UpdateProduct(product);
+            //CartsScreenUseCases.UpddateCart(cart);
+        }
+
+
+    }
+}

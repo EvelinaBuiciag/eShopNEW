@@ -1,0 +1,58 @@
+﻿@page "/"
+@inject IProductsScreenUseCases ProductsScreenUseCases
+<h3>Search Products</h3>
+<br />
+
+<SearchBarComponent OnSearch="Search"></SearchBarComponent>
+
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Discount
+            </th>
+            <th>
+                Cart
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (products != null && products.Count() > 0)
+        {
+    @foreach (var product in products)
+    {
+    <ProductRowComponent Product="product"></ProductRowComponent>} }
+                else
+                {
+    <tr>
+        <td colspan="3">
+            Cannot find products
+        </td>
+    </tr>}
+    </tbody>
+</table>
+
+@code {
+
+    private IEnumerable<Product> products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductsScreenUseCases.ViewProductsAsync();
+    }
+    protected async Task Search(string filter)
+    {
+        products = await ProductsScreenUseCases.Execute(filter);
+    }
+
+}
